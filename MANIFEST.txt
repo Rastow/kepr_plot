@@ -1,0 +1,12 @@
+Directory .
+README.txt
+    Instructions for compiling the main document.
+LICENSE.txt
+    LPPL license.
+main.tex
+    Main document.
+MANIFEST.txt
+    This file.
+
+Directory data/
+    Example data for use with the main document.

@@ -1,0 +1,168 @@
+%% main.tex
+%% Copyright 2022 Robert Grzonka
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+%
+% The Current Maintainer of this work is Robert Grzonka.
+%
+% This work consists of all files listed in MANIFEST.txt.
+\documentclass[crop]{standalone}
+
+% main font
+\usepackage{fontspec}
+\setmainfont{Latin Modern Roman}
+
+% math font
+\usepackage{amsmath}
+\usepackage{unicode-math}
+\setmathfont{Latin Modern Math}
+\unimathsetup{
+    math-style=ISO,
+	bold-style=ISO,
+	sans-style=italic,
+	nabla=upright,
+	partial=upright,
+}
+
+% units
+\usepackage{siunitx}
+\sisetup{
+    unit-font-command=\symup,
+    locale=DE,
+    round-mode=figures,
+    round-precision=3,
+}
+\DeclareSIUnit{\arbitraryunit}{arb.~u.}
+
+% chemistry
+%redefine chemgreek_text to use upright math alphabet instead
+\usepackage{chemmacros}
+\chemsetup{
+    greek=fontspec,
+}
+\ExplSyntaxOn
+\cs_set_protected:Nn \chemgreek_text:n
+    {\ensuremath{\symup{#1}}}
+\ExplSyntaxOff
+
+% pictures
+\usepackage{tikz}
+\usetikzlibrary{calc, positioning}
+
+% plots & global settings
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{
+    compat=1.18,
+    legend style={
+        legend pos=north east,
+        legend cell align=left,
+        legend columns=1,
+        name=legend,
+    },
+    enlarge y limits=0.05,
+    enlarge x limits=0.05,
+    tick pos=lower,
+    tick align=outside,
+    extra tick style={
+        grid=major,
+        major grid style=dashed,
+        ticks=none,
+    },
+    clip marker paths=true,
+    clip limits=true,
+}
+
+% predefined line styles
+\pgfplotsset{
+    data/.style={
+        only marks,
+        mark=*,
+        mark size=0.4,
+    },
+    fit/.style={
+        red,
+        very thick,
+        no marks,
+        line join=round,
+    },
+    residuals/.style={
+        black,
+        data,
+    },
+}
+
+% number format
+% german locale
+\pgfkeys{
+    /pgf/number format/.cd,
+    set decimal separator={{{,}}},
+    set thousands separator={\,},
+}
+
+\begin{document}
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={
+        columns=1,
+        rows=2,
+        xlabels at=edge bottom,
+        ylabels at=edge left,
+    },
+    width=14cm,
+    scale only axis,
+    xlabel=$t / \unit{\second}$,
+    ylabel=$I / \unit{\arbitraryunit}$,
+    enlarge x limits=false,
+    xmin=0,
+    xmax=120,
+]
+
+
+\nextgroupplot[
+    height=8cm,
+    max space between ticks=50,
+    try min ticks=5,
+    extra x ticks=0,
+    extra y ticks=0,
+    extra description/.code={
+        \node[below=0.03*8cm,anchor=north east, draw, fill=white] at (legend.south east) {
+            \shortstack[l]{
+                $x_0 = \num{14.3046} $ \\
+                $y_0 = \num{-157.838}$ \\
+                $A_1 = \num{378.638}$ \\
+                $\tau_1 = \qty{19.0332}{\second}$ \\
+                $A_2 = \num{190.706}$ \\
+                $\tau_2 = \qty{3.39973}{\second}$ \\
+                $\chi^2 = \num{305254} $
+            }
+        };
+    },
+]
+
+\addplot [data] table [x=tkepr, y=kepr, col sep=tab]{data/esr_daten-6_kepr.txt};
+\addlegendentry{Daten}
+
+\addplot [fit] table [x=tfit, y=fit, col sep=tab] {data/esr_daten-6_kepr.txt};
+\addlegendentry{Fit}
+
+\nextgroupplot[
+    height=1.5cm,
+    try min ticks=3,
+    extra y ticks={0},
+]
+
+\addplot [residuals] table [x=tres, y=res, col sep=tab]{data/esr_daten-6_kepr.txt};
+\addlegendentry{Residuen}
+
+\end{groupplot}
+\end{tikzpicture}
+\end{document}
