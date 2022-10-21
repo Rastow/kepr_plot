@@ -119,49 +119,55 @@
     },
     width=14cm,
     scale only axis,
-    xlabel=$t / \unit{\second}$,
-    ylabel=$I / \unit{\arbitraryunit}$,
+    xlabel=$t$ / \unit{\second},
     enlarge x limits=false,
     xmin=0,
-    xmax=120,
+    xmax=60,
 ]
 
 
 \nextgroupplot[
     height=8cm,
+    ylabel=$I$ / \unit{\arbitraryunit},
     max space between ticks=50,
     try min ticks=5,
     extra x ticks=0,
     extra y ticks=0,
     extra description/.code={
-        \node[below=0.03*8cm,anchor=north east, draw, fill=white] at (legend.south east) {
+        \node[below=0.03*8cm, anchor=north east, draw, fill=white] at (legend.south east) {
             \shortstack[l]{
-                $x_0 = \num{14.3046} $ \\
-                $y_0 = \num{-157.838}$ \\
-                $A_1 = \num{378.638}$ \\
-                $\tau_1 = \qty{19.0332}{\second}$ \\
-                $A_2 = \num{190.706}$ \\
-                $\tau_2 = \qty{3.39973}{\second}$ \\
-                $\chi^2 = \num{305254} $
+                $x_0 = \num{9.49818}$ \\
+                $y_0 = \num{1522.56}$ \\
+                $A_1 = \num{2465.36}$ \\
+                $\tau_1 = \qty{5.97807}{\second}$ \\
+                $A_2 = \num{2862.29}$ \\
+                $\tau_2 = \qty{25.0}{\second}$ \\
+                $\chi^2 = \num{2.57026e6}$
+            }
+        };
+        \node[left=0.03*12cm, anchor=north east] at (legend.north west) {
+            \shortstack[l]{
+                \textbf{\ch{Me_3CN(O^{.})OSnBu_3}} \\
+		Reaktionsweg 1
             }
         };
     },
 ]
 
-\addplot [data] table [x=tkepr, y=kepr, col sep=tab]{data/esr_daten-6_kepr.txt};
-\addlegendentry{Daten}
+\addplot [data] table [x=t1kepr, y=1kepr, col sep=tab]{data/esr_daten-7_kepr.txt};
+\addlegendentry{Datenpunkte}
 
-\addplot [fit] table [x=tfit, y=fit, col sep=tab] {data/esr_daten-6_kepr.txt};
+\addplot [fit] table [x=t1fit, y=1fit, col sep=tab] {data/esr_daten-7_kepr.txt};
 \addlegendentry{Fit}
 
 \nextgroupplot[
     height=1.5cm,
+    ylabel=Residuen,
     try min ticks=3,
     extra y ticks={0},
 ]
 
-\addplot [residuals] table [x=tres, y=res, col sep=tab]{data/esr_daten-6_kepr.txt};
-\addlegendentry{Residuen}
+\addplot [residuals] table [x=t1res, y=1res, col sep=tab]{data/esr_daten-7_kepr.txt};
 
 \end{groupplot}
 \end{tikzpicture}
