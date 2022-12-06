@@ -94,9 +94,13 @@
         no marks,
         line join=round,
     },
+    extrapolation/.style={
+        fit,
+        dashed,
+    },
     residuals/.style={
-        black,
         data,
+        black,
     },
 }
 
@@ -121,8 +125,8 @@
     scale only axis,
     xlabel=$t$ / \unit{\second},
     enlarge x limits=false,
-    xmin=0,
-    xmax=60,
+    xmin=-14.1831,
+    xmax=105.817,
 ]
 
 
@@ -136,29 +140,28 @@
     extra description/.code={
         \node[below=0.03*8cm, anchor=north east, draw, fill=white] at (legend.south east) {
             \shortstack[l]{
-                $x_0 = \num{9.49818}$ \\
-                $y_0 = \num{1522.56}$ \\
-                $A_1 = \num{2465.36}$ \\
-                $\tau_1 = \qty{5.97807}{\second}$ \\
-                $A_2 = \num{2862.29}$ \\
-                $\tau_2 = \qty{25.0}{\second}$ \\
-                $\chi^2 = \num{2.57026e6}$
+                $A_0 = \num{635.433}$ \\
+                $k = \num{9.42274E-5}$ \\
+                $y_0 = \num{-215.253}$ \\
+                $\chi^2 = \num{364517}$
             }
         };
         \node[left=0.03*12cm, anchor=north east] at (legend.north west) {
             \shortstack[l]{
-                \textbf{\ch{Me_3CN(O^{.})OSnBu_3}} \\
-		Reaktionsweg 1
+                \textbf{\ch{^{\textit{t}}Bu-O-O^{.}}}
             }
         };
     },
 ]
 
-\addplot [data] table [x=t1kepr, y=1kepr, col sep=tab]{data/esr_daten-7_kepr.txt};
+\addplot [data] table [x=tfit, y=kepr, col sep=tab]{data/esr_daten-6_kepr.txt};
 \addlegendentry{Datenpunkte}
 
-\addplot [fit] table [x=t1fit, y=1fit, col sep=tab] {data/esr_daten-7_kepr.txt};
+\addplot [fit, restrict x to domain=0:50] table [x=tfit, y=fit, col sep=tab] {data/esr_daten-6_kepr.txt};
 \addlegendentry{Fit}
+
+\addplot [extrapolation, restrict y to domain=-200:600] table [x=tfit, y=fit, col sep=tab] {data/esr_daten-6_kepr.txt};
+\addlegendentry{Extrapolation}
 
 \nextgroupplot[
     height=1.5cm,
@@ -167,7 +170,7 @@
     extra y ticks={0},
 ]
 
-\addplot [residuals] table [x=t1res, y=1res, col sep=tab]{data/esr_daten-7_kepr.txt};
+\addplot [residuals, restrict x to domain=0:50] table [x=tfit, y=res, col sep=tab]{data/esr_daten-6_kepr.txt};
 
 \end{groupplot}
 \end{tikzpicture}
